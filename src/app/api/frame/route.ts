@@ -8,7 +8,7 @@ import { getNFTOwner } from "../../utils/getNFTOwners";
 import { getAccount } from "../../utils/getAccount";
 import { Redis } from "@upstash/redis";
 
-const NEXT_PUBLIC_URL = "https://dac8-205-254-163-184.ngrok-free.app";
+const NEXT_PUBLIC_URL = "https://outcast-recommender.vercel.app/";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = "";
