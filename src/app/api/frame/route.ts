@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getNFTOwner } from "../../utils/getNFTOwners";
 import { getAccount } from "../../utils/getAccount";
 import { getNFTImageUrl } from "../../utils/getNFTImageUrl";
+import { getListing } from "../../utils/getListing";
 
 import { Redis } from "@upstash/redis";
 
@@ -38,6 +39,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     let tokenId;
     let uAddress;
     let metadata;
+    let listingPrice;
     if (d) {
       count = d;
     } else {
@@ -63,6 +65,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       }
     }
 
+    const resListing = await getListing(tokenId);
+    console.log(resListing[0]);
+
+    const price = resListing[0]?.current_price / Math.pow(10, 18);
+    const openseaLabel = resListing[0] ? `Buy ${price} ETH` : `Bid on Opensea`;
+    console.log({ openseaLabel });
+
     return new NextResponse(
       getFrameHtmlResponse({
         buttons: [
@@ -76,7 +85,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           },
           {
             action: "link",
-            label: "Bid on Opensea",
+            label: openseaLabel,
             target: `https://opensea.io/assets/base/0x73682a7f47cb707c52cb38192dbb9266d3220315/${tokenId}`,
           },
         ],
