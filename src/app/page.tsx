@@ -9,7 +9,7 @@ const frameMetadata = getFrameMetadata({
       label: "Find Fellow Outcast",
     },
   ],
-  image: `${NEXT_PUBLIC_URL}/success.png`,
+  image: `${NEXT_PUBLIC_URL}/outcast.png`,
 
   post_url: `${NEXT_PUBLIC_URL}/api/frame`,
 });
