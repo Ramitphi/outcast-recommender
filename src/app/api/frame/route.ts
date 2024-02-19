@@ -62,7 +62,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           {
             action: "link",
             label: `${showuser} 📖`,
-            target: `https://warpcast/${showuser}`,
+            target: `https://warpcast.com/${showuser}`,
           },
         ],
         image: `${NEXT_PUBLIC_URL}/outcast.png`,
