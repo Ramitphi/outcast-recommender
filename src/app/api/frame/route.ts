@@ -94,7 +94,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       ],
       image: {
         src: `${NEXT_PUBLIC_URL}/failure.png`,
-        aspectRatio: "1:1",
+        aspectRatio: "1.91:1",
       },
       post_url: `${NEXT_PUBLIC_URL}/api/frame`,
     })
