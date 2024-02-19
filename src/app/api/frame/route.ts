@@ -52,7 +52,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       tokenId = res[i]?.tokenId;
       user = await getAccount(uAddress);
 
-      if (user) {
+      if (user && metadata) {
         showuser = user[0].profileName;
         console.log({ showuser });
         metadata = await getNFTImageUrl(tokenId);
