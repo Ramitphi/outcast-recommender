@@ -51,11 +51,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       uAddress = res[i]?.owner?.identity;
       tokenId = res[i]?.tokenId;
       user = await getAccount(uAddress);
+      metadata = await getNFTImageUrl(tokenId);
 
       if (user && metadata) {
         showuser = user[0].profileName;
         console.log({ showuser });
-        metadata = await getNFTImageUrl(tokenId);
         console.log({ metadata });
         const it = Math.random() * 190;
         await redis.set(accountAddress, it);
