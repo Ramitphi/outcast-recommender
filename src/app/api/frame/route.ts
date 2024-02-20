@@ -33,10 +33,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     accountAddress = message.interactor.verified_accounts[0];
     const d: number | null = await redis.get(accountAddress);
 
-    console.log({ d });
-
     const res = await getNFTOwner(accountAddress);
-    console.log({ res });
     let tokenId;
     let uAddress;
     let metadata;
@@ -69,7 +66,6 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     }
 
     const resListing = await getListing(tokenId);
-    console.log(resListing[0]);
 
     const price = resListing[0]?.current_price / Math.pow(10, 18);
     const openseaLabel = resListing[0] ? `Buy ${price} ETH` : `Bid on Opensea`;

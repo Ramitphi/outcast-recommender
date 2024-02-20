@@ -10,7 +10,7 @@ export const getMeeting = async (address1, address2) => {
     {
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.API_KEY,
+        "x-api-key": process.env.PVT_KEY,
       },
     }
   );
