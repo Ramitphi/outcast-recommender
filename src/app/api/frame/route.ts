@@ -8,7 +8,6 @@ import { getNFTOwner } from "../../utils/getNFTOwners";
 import { getAccount } from "../../utils/getAccount";
 import { getNFTImageUrl } from "../../utils/getNFTImageUrl";
 import { getListing } from "../../utils/getListing";
-import { getMeeting } from "../../utils/getMeeting";
 
 import { Redis } from "@upstash/redis";
 
