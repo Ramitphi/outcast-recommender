@@ -11,7 +11,7 @@ import { getListing } from "../../utils/getListing";
 import { getMeeting } from "../../utils/getMeeting";
 
 import { Redis } from "@upstash/redis";
-const NEXT_PUBLIC_URL = "https://e1ef-205-254-163-183.ngrok-free.app";
+const NEXT_PUBLIC_URL = "https://outcast-recommender.vercel.app";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = "";
