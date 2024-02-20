@@ -8,6 +8,7 @@ import { getNFTOwner } from "../../utils/getNFTOwners";
 import { getAccount } from "../../utils/getAccount";
 import { getNFTImageUrl } from "../../utils/getNFTImageUrl";
 import { getListing } from "../../utils/getListing";
+import { getMeeting } from "../../utils/getMeeting";
 
 import { Redis } from "@upstash/redis";
 
@@ -39,6 +40,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     let tokenId;
     let uAddress;
     let metadata;
+    let meetingLink;
     let listingPrice;
     if (d) {
       count = d;
@@ -54,6 +56,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       tokenId = res[i]?.tokenId;
       user = await getAccount(uAddress);
       metadata = await getNFTImageUrl(uAddress);
+      meetingLink = await getMeeting(accountAddress, uAddress);
 
       if (user && metadata) {
         showuser = user[0].profileName;
@@ -87,6 +90,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             action: "link",
             label: openseaLabel,
             target: `https://opensea.io/assets/base/0x73682a7f47cb707c52cb38192dbb9266d3220315/${tokenId}`,
+          },
+          {
+            action: "link",
+            label: "Hop for a Call",
+            target: `https://app.huddle01.com/${meetingLink}`,
           },
         ],
         image: `${metadata}`,
