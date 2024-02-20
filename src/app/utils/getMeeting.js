@@ -6,11 +6,13 @@ export const getMeeting = async (address1, address2) => {
     {
       title: "Huddle01-Test",
       hostWallets: [address1, address2],
+      roomLocked: true,
     },
     {
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": process.env.API_KEY,
+        "x-api-key":
+          "a6a3e422a20a51efe49bdd8e4fd7b56b397a80a085715c8fca00898e1753",
       },
     }
   );
