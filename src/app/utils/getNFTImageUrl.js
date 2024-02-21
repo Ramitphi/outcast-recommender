@@ -12,7 +12,7 @@ export const getNFTImageUrl = async (address) => {
   };
 
   const { data } = await axios.get(
-    `https://api.simplehash.com/api/v0/nfts/owners?chains=base&wallet_addresses=${address}&contract_addresses=0x73682A7f47Cb707C52cb38192dBB9266D3220315&limit=50`,
+    `https://api.simplehash.com/api/v0/nfts/owners?chains=base&wallet_addresses=${address}&contract_addresses=0xc056375aa215C2Ac3211Cd9fb5bf69a43Bd481c4&limit=50`,
     options
   );
   console.log({ data: data.nfts[0]?.image_url });

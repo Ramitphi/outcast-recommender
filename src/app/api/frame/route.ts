@@ -11,7 +11,7 @@ import { getListing } from "../../utils/getListing";
 import { getMeeting } from "../../utils/getMeeting";
 
 import { Redis } from "@upstash/redis";
-const NEXT_PUBLIC_URL = "https://outcast-recommender.vercel.app";
+const NEXT_PUBLIC_URL = "https://18ae-103-59-75-15.ngrok-free.app";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = "";
@@ -32,7 +32,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     accountAddress = message.interactor.verified_accounts[0];
     const d: number | null = await redis.get(accountAddress);
 
-    const res = await getNFTOwner(accountAddress);
+    const res = await getNFTOwner();
     let tokenId;
     let uAddress;
     let metadata;
@@ -46,15 +46,14 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     let showuser;
 
     for (let i = Math.floor(count) + 1; i < res?.length; i++) {
-      console.log(i);
-
       uAddress = res[i]?.owner?.identity;
       tokenId = res[i]?.tokenId;
       user = await getAccount(uAddress);
       metadata = await getNFTImageUrl(uAddress);
-      meetingLink = await getMeeting(accountAddress, uAddress);
+      // meetingLink = await getMeeting(accountAddress, uAddress);
+      console.log({ metadata });
 
-      if (user && metadata) {
+      if (user) {
         showuser = user[0].profileName;
         console.log({ showuser });
         console.log({ metadata });
@@ -64,11 +63,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       }
     }
 
-    const resListing = await getListing(tokenId);
+    // const resListing = await getListing(tokenId);
 
-    const price = resListing[0]?.current_price / Math.pow(10, 18);
-    const openseaLabel = resListing[0] ? `Buy ${price} ETH` : `Bid on Opensea`;
-    console.log({ openseaLabel });
+    // const price = resListing[0]?.current_price / Math.pow(10, 18);
+    // const openseaLabel = resListing[0] ? `Buy ${price} ETH` : `Bid on Opensea`;
+    // console.log({ openseaLabel });
 
     return new NextResponse(
       getFrameHtmlResponse({
@@ -83,13 +82,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
           },
           {
             action: "link",
-            label: openseaLabel,
+            label: "Buy",
             target: `https://opensea.io/assets/base/0x73682a7f47cb707c52cb38192dbb9266d3220315/${tokenId}`,
-          },
-          {
-            action: "link",
-            label: `Hop on Call`,
-            target: `https://app.huddle01.com/${meetingLink}`,
           },
         ],
         image: `${metadata}`,
@@ -106,7 +100,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       ],
       image: {
         src: `${NEXT_PUBLIC_URL}/failure.png`,
-        aspectRatio: "1.91:1",
+        aspectRatio: "1:1",
       },
       post_url: `${NEXT_PUBLIC_URL}/api/frame`,
     })
