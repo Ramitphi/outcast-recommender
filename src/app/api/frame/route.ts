@@ -11,7 +11,8 @@ import { getListing } from "../../utils/getListing";
 import { getMeeting } from "../../utils/getMeeting";
 
 import { Redis } from "@upstash/redis";
-const NEXT_PUBLIC_URL = "https://outcast-recommender.vercel.app";
+import { use } from "react";
+const NEXT_PUBLIC_URL = "https://13ec-103-59-75-39.ngrok-free.app";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = "";
@@ -52,50 +53,78 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       tokenId = res[i]?.tokenId;
       user = await getAccount(uAddress);
       metadata = await getNFTImageUrl(uAddress);
-      meetingLink = await getMeeting(accountAddress, uAddress);
+      // meetingLink = await getMeeting(accountAddress, uAddress);
 
-      if (user && metadata) {
+      if (user) {
         showuser = user[0].profileName;
-        console.log({ showuser });
-        console.log({ metadata });
+
+        const it = Math.random() * 190;
+        await redis.set(accountAddress, it);
+        break;
+      }
+      if (metadata) {
+        console.log(i);
+
         const it = Math.random() * 190;
         await redis.set(accountAddress, it);
         break;
       }
     }
-
+    let price;
     const resListing = await getListing(tokenId);
+    console.log({ hh: resListing[0] });
+    if (resListing[0]?.current_price) {
+      price = resListing[0]?.current_price / Math.pow(10, 18);
+    }
+    console.log({ price });
 
-    const price = resListing[0]?.current_price / Math.pow(10, 18);
     const openseaLabel = resListing[0] ? `Buy ${price} ETH` : `Bid on Opensea`;
-    console.log({ openseaLabel });
-
-    return new NextResponse(
-      getFrameHtmlResponse({
-        buttons: [
-          {
-            label: "Next",
-          },
-          {
-            action: "link",
-            label: `${showuser} 📖`,
-            target: `https://warpcast.com/${showuser}`,
-          },
-          {
-            action: "link",
-            label: openseaLabel,
-            target: `https://opensea.io/assets/base/0x73682a7f47cb707c52cb38192dbb9266d3220315/${tokenId}`,
-          },
-          {
-            action: "link",
-            label: `Hop on Call`,
-            target: `https://app.huddle01.com/${meetingLink}`,
-          },
-        ],
-        image: `${metadata}`,
-        post_url: `${NEXT_PUBLIC_URL}/api/frame`,
-      })
-    );
+    const farcaster = user ? `${user} 🐱` : "Not on FC";
+    if (user) {
+      return new NextResponse(
+        getFrameHtmlResponse({
+          buttons: [
+            {
+              label: "Next",
+            },
+            {
+              action: "link",
+              label: farcaster,
+              target: `https://warpcast.com/${user}`,
+            },
+            {
+              action: "link",
+              label: openseaLabel,
+              target: `https://opensea.io/assets/base/0xBDB1A8772409A0C5eEb347060cbf4B41dD7B2C62/${tokenId}`,
+            },
+          ],
+          image: `${metadata}`,
+          post_url: `${NEXT_PUBLIC_URL}/api/frame`,
+        })
+      );
+    }
+    if (metadata) {
+      return new NextResponse(
+        getFrameHtmlResponse({
+          buttons: [
+            {
+              label: "Next",
+            },
+            {
+              label: farcaster,
+              target: `https://warpcast.com/${user}`,
+            },
+            {
+              action: "link",
+              label: openseaLabel,
+              target: `https://opensea.io/assets/base/0xBDB1A8772409A0C5eEb347060cbf4B41dD7B2C62/${tokenId}`,
+            },
+          ],
+          image: `${metadata}`,
+          post_url: `${NEXT_PUBLIC_URL}/api/frame`,
+        })
+      );
+    }
   }
   return new NextResponse(
     getFrameHtmlResponse({

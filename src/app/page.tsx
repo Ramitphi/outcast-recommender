@@ -1,15 +1,15 @@
 import { getFrameMetadata } from "@coinbase/onchainkit";
 import type { Metadata } from "next";
 
-const NEXT_PUBLIC_URL = "https://outcast-recommender.vercel.app";
+const NEXT_PUBLIC_URL = "https://13ec-103-59-75-39.ngrok-free.app";
 
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: "Find Fellow Outcast",
+      label: "Find Fellow ToshiCat",
     },
   ],
-  image: `${NEXT_PUBLIC_URL}/outcast.png`,
+  image: `${NEXT_PUBLIC_URL}/toshi.png`,
 
   post_url: `${NEXT_PUBLIC_URL}/api/frame`,
 });

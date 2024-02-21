@@ -1,7 +1,7 @@
 import { init } from "@airstack/airstack-react";
 import { fetchQuery } from "@airstack/airstack-react";
 
-export const getNFTOwner = async (address) => {
+export const getAlldata = async () => {
   console.log({ address });
   init(process.env.AIRSTACK_API_KEY);
 
@@ -12,12 +12,22 @@ export const getNFTOwner = async (address) => {
     ) {
       TokenBalance {
         owner {
-          identity
+          socials(
+            input: {filter: {dappName: {_eq: farcaster}}}
+          ) {
+            profileName
+          }
         }
-        amount
         tokenAddress
         tokenId
         tokenType
+        tokenNfts {
+          contentValue {
+            image {
+              small
+            }
+          }
+        }
       }
       pageInfo {
         nextCursor
