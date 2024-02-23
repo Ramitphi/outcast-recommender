@@ -11,7 +11,7 @@ export const getListing = async (tokenId) => {
   };
 
   const { data } = await axios.get(
-    `https://api.opensea.io//api/v2/orders/base/seaport/listings?asset_contract_address=0x73682A7f47Cb707C52cb38192dBB9266D3220315&order_by=created_date&order_direction=desc&token_ids=${tokenId}`,
+    `https://api.opensea.io//api/v2/orders/base/seaport/listings?asset_contract_address=0xc056375aa215C2Ac3211Cd9fb5bf69a43Bd481c4&order_by=created_date&order_direction=desc&token_ids=${tokenId}`,
     options
   );
 

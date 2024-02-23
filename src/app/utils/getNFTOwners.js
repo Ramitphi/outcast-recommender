@@ -8,7 +8,7 @@ export const getNFTOwner = async (address) => {
   const query = `
   query MyQuery {
     Base: TokenBalances(
-      input: {filter: {tokenAddress: {_eq: "0x73682A7f47Cb707C52cb38192dBB9266D3220315"}}, blockchain: base, limit: 200}
+      input: {filter: {tokenAddress: {_eq: "0xc056375aa215C2Ac3211Cd9fb5bf69a43Bd481c4"}}, blockchain: base, limit: 200}
     ) {
       TokenBalance {
         owner {
