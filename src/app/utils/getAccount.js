@@ -20,6 +20,5 @@ export const getAccount = async (address) => {
 
   const { data, error } = await fetchQuery(query);
 
-  console.log({ data });
   return data?.Socials?.Social;
 };

@@ -12,7 +12,7 @@ import { getMeeting } from "../../utils/getMeeting";
 
 import { Redis } from "@upstash/redis";
 import { use } from "react";
-const NEXT_PUBLIC_URL = "https://13ec-103-59-75-39.ngrok-free.app";
+const NEXT_PUBLIC_URL = "https://7419-103-59-75-15.ngrok-free.app";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = "";
@@ -34,6 +34,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     const d: number | null = await redis.get(accountAddress);
 
     const res = await getNFTOwner(accountAddress);
+
     let tokenId;
     let uAddress;
     let metadata;
@@ -46,17 +47,21 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     }
     let showuser;
 
-    for (let i = Math.floor(count) + 1; i < res?.length; i++) {
+    for (let i = Math.floor(count) + 1; i < 200; i++) {
       console.log(i);
 
       uAddress = res[i]?.owner?.identity;
       tokenId = res[i]?.tokenId;
+      console.log({ tokenId });
+
       user = await getAccount(uAddress);
-      metadata = await getNFTImageUrl(uAddress);
+      metadata = await getNFTImageUrl(tokenId);
+      console.log({ metadata });
+
       // meetingLink = await getMeeting(accountAddress, uAddress);
 
       if (user) {
-        showuser = user[0].profileName;
+        showuser = user[0]?.profileName;
 
         const it = Math.random() * 190;
         await redis.set(accountAddress, it);
@@ -72,14 +77,13 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     }
     let price;
     const resListing = await getListing(tokenId);
-    console.log({ hh: resListing[0] });
     if (resListing[0]?.current_price) {
       price = resListing[0]?.current_price / Math.pow(10, 18);
     }
     console.log({ price });
 
     const openseaLabel = resListing[0] ? `Buy ${price} ETH` : `Bid on Opensea`;
-    const farcaster = user ? `${user} 🐱` : "Not on FC";
+    const farcaster = user ? `${showuser} 🐱` : "Not on FC";
     if (user) {
       return new NextResponse(
         getFrameHtmlResponse({
@@ -87,11 +91,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             {
               label: "Next",
             },
-            {
-              action: "link",
-              label: farcaster,
-              target: `https://warpcast.com/${user}`,
-            },
+
             {
               action: "link",
               label: openseaLabel,
@@ -110,13 +110,11 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             {
               label: "Next",
             },
-            {
-              label: farcaster,
-              target: `https://warpcast.com/${user}`,
-            },
+
             {
               action: "link",
               label: openseaLabel,
+
               target: `https://opensea.io/assets/base/0xBDB1A8772409A0C5eEb347060cbf4B41dD7B2C62/${tokenId}`,
             },
           ],
