@@ -94,7 +94,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             {
               action: "link",
               label: "Buy ",
-              target: `https://opensea.io/assets/base/0x73682a7f47cb707c52cb38192dbb9266d3220315/${tokenId}`,
+              target: `https://opensea.io/assets/base//${tokenId}`,
             },
           ],
           image: `${metadata}`,
@@ -112,7 +112,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
             {
               action: "link",
               label: "Buy ",
-              target: `https://opensea.io/assets/base/0x73682a7f47cb707c52cb38192dbb9266d3220315/${tokenId}`,
+              target: `https://opensea.io/assets/base/0xc056375aa215C2Ac3211Cd9fb5bf69a43Bd481c4/${tokenId}`,
             },
           ],
           image: `${metadata}`,
