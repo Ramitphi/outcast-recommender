@@ -5,14 +5,14 @@ import {
 } from "@coinbase/onchainkit";
 import { NextRequest, NextResponse } from "next/server";
 import { getNFTOwner } from "../../utils/getNFTOwners";
-import { getAccount } from "../../utils/getAccount";
+// import { getAccount } from "../../utils/getAccount";
 import { getNFTImageUrl } from "../../utils/getNFTImageUrl";
 import { getListing } from "../../utils/getListing";
-import { getMeeting } from "../../utils/getMeeting";
+import { getCollectionsStats } from "../../utils/getCollectionStats";
 
 import { Redis } from "@upstash/redis";
 
-const NEXT_PUBLIC_URL = "https://fellow-toshi.vercel.app";
+const NEXT_PUBLIC_URL = "https://c858-103-59-75-203.ngrok-free.app";
 
 async function getResponse(req: NextRequest): Promise<NextResponse> {
   let accountAddress: string | undefined = "";
@@ -33,7 +33,8 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
     accountAddress = message.interactor.verified_accounts[0];
     const d: number | null = await redis.get(accountAddress);
 
-    const res = await getNFTOwner(accountAddress);
+    const res = await getNFTOwner();
+    console.log({ res });
 
     let tokenId;
     let uAddress;
@@ -46,6 +47,7 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       count = 0;
     }
     let showuser;
+    const { floor_price } = await getCollectionsStats();
 
     for (let i = Math.floor(count) + 1; i < 200; i++) {
       console.log(i);
@@ -54,19 +56,21 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
       tokenId = res[i]?.tokenId;
       console.log({ tokenId });
 
-      user = await getAccount(uAddress);
+      // user = await getAccount(uAddress);
       metadata = await getNFTImageUrl(tokenId);
       console.log({ metadata });
+      console.log(user);
 
       // meetingLink = await getMeeting(accountAddress, uAddress);
 
-      if (user) {
-        showuser = user[0]?.profileName;
+      // if (user) {
+      //   showuser = user[0]?.profileName;
 
-        const it = Math.random() * 190;
-        await redis.set(accountAddress, it);
-        break;
-      }
+      //   const it = Math.random() * 190;
+      //   await redis.set(accountAddress, it);
+      //   break;
+      // }
+
       if (metadata) {
         console.log(i);
 
@@ -84,25 +88,25 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
 
     const openseaLabel = resListing[0] ? `Buy ${price} ETH` : `Bid on Opensea`;
     const farcaster = user ? `${showuser} 🐱` : "Not on FC";
-    if (user) {
-      return new NextResponse(
-        getFrameHtmlResponse({
-          buttons: [
-            {
-              label: "Next",
-            },
+    // if (user) {
+    //   return new NextResponse(
+    //     getFrameHtmlResponse({
+    //       buttons: [
+    //         {
+    //           label: "Next",
+    //         },
 
-            {
-              action: "link",
-              label: openseaLabel,
-              target: `https://opensea.io/assets/base/0xBDB1A8772409A0C5eEb347060cbf4B41dD7B2C62/${tokenId}`,
-            },
-          ],
-          image: `${metadata}`,
-          post_url: `${NEXT_PUBLIC_URL}/api/frame`,
-        })
-      );
-    }
+    //         {
+    //           action: "link",
+    //           label: openseaLabel,
+    //           target: `https://opensea.io/assets/base/0xBDB1A8772409A0C5eEb347060cbf4B41dD7B2C62/${tokenId}`,
+    //         },
+    //       ],
+    //       image: `${metadata}`,
+    //       post_url: `${NEXT_PUBLIC_URL}/api/frame`,
+    //     })
+    //   );
+    // }
     if (metadata) {
       return new NextResponse(
         getFrameHtmlResponse({
@@ -116,6 +120,9 @@ async function getResponse(req: NextRequest): Promise<NextResponse> {
               label: openseaLabel,
 
               target: `https://opensea.io/assets/base/0xBDB1A8772409A0C5eEb347060cbf4B41dD7B2C62/${tokenId}`,
+            },
+            {
+              label: `Floor Price ${floor_price} ETH`,
             },
           ],
           image: `${metadata}`,
